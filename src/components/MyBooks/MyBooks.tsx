@@ -1,8 +1,8 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Context } from '../main';
 import 'firebase/firestore';
 import 'firebase/auth';
+import { Context } from '../../main';
 
 interface DataItem {
     id: string,
@@ -71,24 +71,6 @@ function MyBooks() {
             navigate('/');
         }
     }, [context, navigate]);
-    //     const fetchData = async () => {
-    //         try {
-    //             const snapshot = await firestore.collection('collectionData').get();
-    //             const fetchedData: DataItem[] = snapshot.docs.map(doc => ({
-    //                 id: doc.id,
-    //                 ...doc.data() as Omit<DataItem, 'id'>
-    //             }));
-    //             setData(fetchedData);
-    //         } catch (err) {
-    //             setError('Error fetching data');
-    //             console.error(err);
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-
-    //     fetchData();
-    // }, [firestore]);
 
     useEffect(() => {
         console.log(data);

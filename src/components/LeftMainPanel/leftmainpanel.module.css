@@ -1,0 +1,56 @@
+.panelWrap {
+    position: absolute;
+    padding: 30px 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 150px;
+    background-color: rgb(11, 0, 94);
+}
+
+.usersPanel {
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid white;
+}
+
+.userInfoWrap {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.userName {
+    display: block;
+    font-size: 20px;
+    color: white;
+}
+
+.navBar {
+    display: flex;
+    flex-direction: column;
+}
+
+.navBarButton:not(:last-child) {
+    margin-bottom: 10px;
+}
+
+.navBarButton {
+    font-size: 18px;
+    color: white;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    background-color: transparent;
+    opacity: 1;
+    transition: opacity .3s ease-in-out;
+}
+
+.navBarButton:hover,
+.navBarButton:focus {
+    opacity: 0.5;
+    transition: opacity .3s ease-in-out;
+}
