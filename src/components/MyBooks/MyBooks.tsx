@@ -1,106 +1,25 @@
-import { useCallback, useContext, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useContext, useEffect, useState } from 'react';
 import 'firebase/firestore';
 import 'firebase/auth';
 import { Context } from '../../main';
-
-interface DataItem {
-    id: string,
-    text: string,
-    createdAt: Date,
-}
+import { useFetchData } from '../../utils/customHooks/useFetchData';
+import { useAuthorizationCheck } from '../../utils/customHooks/useAuthorizationCheck';
 
 function MyBooks() {
+    const { isAuthorized } = useAuthorizationCheck();
+    const { data, loading, error, fetchData } = useFetchData('collectionData');
     const context = useContext(Context);
     if (!context) {
         throw new Error("Context must be used within a Provider");
     }
-    const { firestore, auth } = context;
-    const navigate = useNavigate();
-    const [isAuthorized, setIsAuthorized] = useState(false);
+    const { firestore } = context;
     const [value, setValue] = useState('');
-    const [data, setData] = useState<DataItem[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
 
-    const fetchData = useCallback(async () => {
-        try {
-            const snapshot = await firestore.collection('collectionData').get();
-            const fetchedData: DataItem[] = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data() as Omit<DataItem, 'id'>
-            }));
-            setData(fetchedData);
-        } catch (err) {
-            setError('Error fetching data');
-            console.error(err);
-        } finally {
-            setLoading(false);
+    useEffect(() => {
+        if (isAuthorized) {
+            fetchData();
         }
-    }, [firestore]);
-
-    useEffect(() => {
-        fetchData();
-    }, [fetchData]);
-
-
-    useEffect(() => {
-        if (!context) {
-            navigate('/');
-            return;
-        }
-
-        const { auth, firestore } = context;
-        const user = auth.currentUser;
-
-        if (user && user.email) {
-            const userRef = firestore.collection('authorizedUsers').doc(user.email);
-            userRef.get().then((doc) => {
-                if (doc.exists && doc.data()?.allowed) {
-                    setIsAuthorized(true);
-                } else {
-                    auth.signOut();
-                    navigate('/');
-                }
-            }).catch((error) => {
-                console.error("Error checking authorization:", error);
-                auth.signOut();
-                navigate('/');
-            });
-        } else {
-            navigate('/');
-        }
-    }, [context, navigate]);
-
-    useEffect(() => {
-        console.log(data);
-    }, [data]);
-
-    useEffect(() => {
-        const unsubscribe = auth?.onAuthStateChanged(async user => {
-            if (user && user.email) {
-                const userRef = firestore.collection('authorizedUsers').doc(user.email);
-                try {
-                    const doc = await userRef.get();
-                    if (doc.exists && doc.data()?.allowed) {
-                        setIsAuthorized(true);
-                        fetchData(); // Fetch data if user is authorized
-                    } else {
-                        await auth.signOut();
-                        navigate('/');
-                    }
-                } catch (error) {
-                    console.error("Error checking authorization:", error);
-                    await auth.signOut();
-                    navigate('/');
-                }
-            } else {
-                navigate('/');
-            }
-        });
-
-        return () => unsubscribe(); // Clean up the subscription on unmount
-    }, [auth, firestore, fetchData, navigate]);
+    }, [isAuthorized, fetchData]);
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
