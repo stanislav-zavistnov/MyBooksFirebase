@@ -4,6 +4,9 @@ import 'firebase/auth';
 import { Context } from '../../main';
 import { useFetchData } from '../../utils/customHooks/useFetchData';
 import { useAuthorizationCheck } from '../../utils/customHooks/useAuthorizationCheck';
+import { BookRow } from '../BookRow/BookRow';
+import styles from './mybooks.module.css';
+import { Button } from 'antd';
 
 function MyBooks() {
     const { isAuthorized } = useAuthorizationCheck();
@@ -26,43 +29,50 @@ function MyBooks() {
 
     function renderList() {
         return data.map(item => {
-            const createdAt = +item.id;
-            const convertDate = new Date(createdAt);
             return (
-                <div key={item.id}>
-                    {`${convertDate}`}
-                </div>
+                <BookRow key={item.id} item={item} fetchData={fetchData}/>
             )
         })
     }
 
-    const sendData = () => {
+    const sendData = async () => {
         const dateNow = Date.now();
-        firestore.collection('collectionData').add({
-            id: dateNow.toString(),
-            text: value,
-            createdAt: dateNow.toString(),
-        });
-        setValue('');
-        fetchData();
-    }
+        const id = dateNow.toString();
+
+        try {
+            const docRef = firestore.collection('collectionData').doc(id);
+            await docRef.set({
+                id: id,
+                text: value,
+                createdAt: dateNow.toString(),
+            });
+
+            setValue('');
+            await fetchData();
+        } catch (error) {
+            console.error('Error adding document:', error);
+        }
+    };
 
     if (!isAuthorized) {
         return <div>Loading...</div>;
     }
 
     return (
-        <div>
-            <h1>My Books</h1>
+        <div className={styles.myBookWrap}>
+            <h1 className={styles.sectionTitle}>My Books</h1>
             <p>Добро пожаловать на страницу ваших книг!</p>
             <input
+                className={styles.myBookInput}
                 type="text"
                 value={value}
                 onChange={e => setValue(e.target.value)} />
-            <button onClick={sendData}>
+            <Button type='primary' className={styles.myBookBtn} onClick={sendData}>
                 отправить новые данные
-            </button>
-            {renderList()}
+            </Button>
+            <div className={styles.myBookList}>
+                {renderList()}
+            </div>
         </div>
     );
 }

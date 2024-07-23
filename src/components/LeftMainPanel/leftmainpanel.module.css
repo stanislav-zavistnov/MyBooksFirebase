@@ -7,7 +7,7 @@
     top: 0;
     left: 0;
     height: 100vh;
-    width: 150px;
+    width: 250px;
     background-color: rgb(11, 0, 94);
 }
 
@@ -24,9 +24,11 @@
 }
 
 .userName {
+    margin-bottom: 5px;
     display: block;
     font-size: 20px;
     color: white;
+    text-align: center;
 }
 
 .navBar {
