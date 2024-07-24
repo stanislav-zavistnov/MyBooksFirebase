@@ -9,10 +9,10 @@ export function NotFoundPage() {
     }
     return (
         <div className={styles.pageWrap}>
-            <h1>
+            <h1 className={styles.title}>
                 Страница не существует.
             </h1>
-            <h1>
+            <h1 className={styles.title}>
                 Давайте вернемся к началу.
             </h1>
             <Button type='primary' onClick={routeToMainPage}>

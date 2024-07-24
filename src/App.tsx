@@ -1,4 +1,4 @@
-import './App.css'
+import styles from './App.module.css';
 import { User } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 
@@ -7,18 +7,18 @@ interface IProps {
 }
 function App({ user }: IProps) {
   return (
-    <>
+    <div className={styles.pageWrap}>
       {!user && (
-        <h1>
+        <h1 className={styles.title}>
           Авторизуйтесь через Google, пожалуйста.
         </h1>
       )}
       {user && (
-        <h1>
+        <h1 className={styles.title}>
           Привет&nbsp;{user.displayName}!
         </h1>
       )}
-    </>
+    </div>
   )
 }
 
