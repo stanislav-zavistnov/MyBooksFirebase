@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { User } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 import MyBooks from './MyBooks/MyBooks';
+import { DetailsBookPage } from './DetailsBookPage/DetailsBookPage';
 
 function PathRoutes() {
   const [user, setUser] = useState<firebase.User | User | null>(null);
@@ -18,6 +19,7 @@ function PathRoutes() {
       <Routes>
         <Route path="/" element={<App user={user}/>} />
         <Route path="/mybooks" element={<MyBooks />} />
+        <Route path="/mybooks/:id" element={<DetailsBookPage />} />
         <Route path="/*" element={<NotFoundPage />} />
       </Routes>
     </>

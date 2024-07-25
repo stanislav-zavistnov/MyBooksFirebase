@@ -5,6 +5,17 @@ export type AuthUser = firebase.User | FirebaseUser | null;
 
 export interface DataItem {
     id: string;
-    text: string;
-    createdAt: Date;
+    bookName: string;
+    createdAt: string;
+    bookLength: string;
+    author: string;
+    comment: string;
+    status: 'inProcess' | 'finished' | 'fireplace';
+    rating: string;
+    dailyResult: Array<dailyResultItem>;
+}
+
+interface dailyResultItem {
+    started: string;
+    currentPage: string;
 }

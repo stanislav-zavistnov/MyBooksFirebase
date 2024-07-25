@@ -6,7 +6,8 @@ import { useFetchData } from '../../utils/customHooks/useFetchData';
 import { useAuthorizationCheck } from '../../utils/customHooks/useAuthorizationCheck';
 import { BookRow } from '../BookRow/BookRow';
 import styles from './mybooks.module.css';
-import { Button, DatePicker, Form, Input, InputRef, Modal } from 'antd';
+import { Button, DatePicker, Form, Input, InputRef, message, Modal } from 'antd';
+import { disabledDate } from '../../utils/disabledDate';
 
 function MyBooks() {
     const [form] = Form.useForm();
@@ -18,6 +19,19 @@ function MyBooks() {
     const context = useContext(Context);
     const valueInputRef = useRef<InputRef>(null);
     const currentPageRef = useRef<InputRef>(null);
+    const [messageApi, contextHolder] = message.useMessage();
+    const successMessage = () => {
+        messageApi.open({
+            type: 'success',
+            content: 'Успешно добавлено в коллекцию',
+        });
+    };
+    const errorMessage = () => {
+        messageApi.open({
+            type: 'error',
+            content: 'Произошла ошибка при создании книги',
+        });
+    };
     if (!context) {
         throw new Error("Context must be used within a Provider");
     }
@@ -41,30 +55,32 @@ function MyBooks() {
     }
 
     const sendData = async () => {
+        const formValues = await form.validateFields();
         const dateNow = Date.now();
         const id = dateNow.toString();
-
-        const formValues = form.getFieldsValue();
         const { bookName, started, bookLength, currentPage } = formValues;
-
+        const statusOfReading = currentPage === bookLength ? 'finished' : 'inProcess';
         try {
             const docRef = firestore.collection('collectionData').doc(id);
             await docRef.set({
                 id: id,
                 bookName,
                 author: '',
-                dailyResult: [{started: started ? started.format('YYYY-MM-DD') : '', currentPage}],
+                dailyResult: [{ started: started ? started.format('YYYY-MM-DD') : '', currentPage }],
                 bookLength,
                 createdAt: dateNow.toString(),
                 comment: '',
                 rating: '',
+                status: statusOfReading,
             });
 
             form.resetFields();
             await fetchData();
             setModalCreate(false);
+            successMessage();
         } catch (error) {
             console.error('Error adding document:', error);
+            errorMessage();
         }
     };
 
@@ -87,6 +103,7 @@ function MyBooks() {
 
     return (
         <div className={styles.myBookWrap}>
+            {contextHolder}
             <h1 className={styles.sectionTitle}>
                 My Books
             </h1>
@@ -107,21 +124,36 @@ function MyBooks() {
                     <Form.Item
                         name={'bookName'}
                         label={'Название книги'}
-                        required={true}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Введите название книги',
+                            },
+                        ]}
                     >
-                        <Input allowClear/>
+                        <Input allowClear />
                     </Form.Item>
                     <Form.Item
                         name={'started'}
                         label={'Дата начала'}
-                        required={true}
+                        rules={[
+                            {
+                              required: true,
+                              message: 'Выберите дату начала чтения',
+                            },
+                          ]}
                     >
-                        <DatePicker allowClear/>
+                        <DatePicker allowClear disabledDate={disabledDate}/>
                     </Form.Item>
                     <Form.Item
                         name={'bookLength'}
                         label={'Всего страниц'}
-                        required={true}
+                        rules={[
+                            {
+                              required: true,
+                              message: 'Укажите кол-во страниц в книге',
+                            },
+                          ]}
                     >
                         <Input
                             id="bookLengthInput"
@@ -136,7 +168,21 @@ function MyBooks() {
                     <Form.Item
                         name={'currentPage'}
                         label={'Я на странице №'}
-                        required={true}
+                        rules={[
+                            {
+                              required: true,
+                              message: 'Текущая страница',
+                            },
+                            {
+                                validator: (_, value) => {
+                                    const bookLength = form.getFieldValue('bookLength');
+                                    if (!value || Number(value) <= Number(bookLength)) {
+                                        return Promise.resolve();
+                                    }
+                                    return Promise.reject(new Error('Текущая страница не может быть больше длины книги'));
+                                }
+                            }
+                          ]}
                     >
                         <Input
                             id="currentPageInput"

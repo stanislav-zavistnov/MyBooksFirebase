@@ -1,58 +1,32 @@
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { DataItem } from '../../types';
 import styles from './bookrow.module.css';
-import { Button, Modal } from 'antd';
-import { ExclamationCircleFilled } from '@ant-design/icons';
-import { useDeleteData } from '../../utils/customHooks/useDeleteItem';
+
+import dayjs from 'dayjs';
 
 interface IItem {
     item: DataItem;
     fetchData: () => void;
 }
 
-export function BookRow({ item, fetchData }: IItem) {
-    // const navigate = useNavigate();
-    const { deleteData } = useDeleteData('collectionData');
+export function BookRow({ item }: IItem) {
+    const navigate = useNavigate();
     const createdAt = +item.id;
-    const convertDate = new Date(createdAt);
-    const { confirm } = Modal;
-    // const handleClick = () => {
-    //     navigate(`/mybook/${item.id}`);
-    // };
-    function handleDeleteItem() {
-        confirm({
-            title: 'Are you sure delete this task?',
-            icon: <ExclamationCircleFilled />,
-            content: 'Some descriptions',
-            okText: 'Yes',
-            okType: 'danger',
-            cancelText: 'No',
-            onOk() {
-                deleteData(item.id);
-                fetchData();
-                console.log('OK');
-            },
-            onCancel() {
-                console.log('Cancel');
-            },
-        });
-    }
+    const convertDate = dayjs(createdAt).format('DD.MM.YYYY');
+    const handleClick = () => {
+        navigate(`/mybooks/${item.id}`);
+    };
     return (
         <div
             className={styles.rowWrap}
-        // onClick={handleClick}
+        onClick={handleClick}
         >
             <span>
                 {`${convertDate}`}
             </span>
             <span>
-                {`${item.text}`}
+                {`${item.bookName}`}
             </span>
-            <div className={styles.actions}>
-                <Button danger type='primary' onClick={handleDeleteItem}>
-                    Удалить книгу
-                </Button>
-            </div>
         </div>
     );
 }

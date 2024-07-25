@@ -16,7 +16,7 @@ export const useFetchData = (collectionName: string) => {
 
     const fetchData = useCallback(async () => {
         try {
-            const snapshot = await firestore.collection(collectionName).get();
+            const snapshot = await firestore.collection(collectionName).orderBy('id', 'desc').get();
             const fetchedData: DataItem[] = snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data() as Omit<DataItem, 'id'>
