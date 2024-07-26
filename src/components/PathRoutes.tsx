@@ -5,10 +5,10 @@ import { NotFoundPage } from './NotFoundPage/NotFoundPage';
 import { useState } from 'react';
 import { User } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
-import MyBooks from './MyBooks/MyBooks';
 import { DetailsBookPage } from './DetailsBookPage/DetailsBookPage';
 import FinishedBooks from './FinishedBooks/FinishedBooks';
 import Fireplace from './Fireplace/Fireplace';
+import ProcessBooks from './ProcessBooks/ProcessBooks';
 
 function PathRoutes() {
   const [user, setUser] = useState<firebase.User | User | null>(null);
@@ -20,8 +20,8 @@ function PathRoutes() {
       <LeftMainPanel handleSetUser={handleSetUser}/>
       <Routes>
         <Route path="/" element={<App user={user}/>} />
-        <Route path="/mybooks" element={<MyBooks />} />
-        <Route path="/mybooks/:id" element={<DetailsBookPage />} />
+        <Route path="/process-books" element={<ProcessBooks />} />
+        <Route path="/process-books/:id" element={<DetailsBookPage />} />
         <Route path="/finished-books" element={<FinishedBooks />} />
         <Route path="/finished-books/:id" element={<DetailsBookPage />} />
         <Route path="/fireplace" element={<Fireplace />} />

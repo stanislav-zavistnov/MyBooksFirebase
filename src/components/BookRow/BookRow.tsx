@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 
 interface IItem {
     item: DataItem;
-    fetchData: () => void;
 }
 
 export function BookRow({ item }: IItem) {

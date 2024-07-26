@@ -9,6 +9,12 @@
 
 .sectionTitle {
     font-size: 30px;
+    margin-bottom: 20px;
+}
+
+.createButton {
+    margin-bottom: 20px;
+    width: fit-content;
 }
 
 .myBookInput {

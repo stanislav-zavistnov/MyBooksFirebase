@@ -3,6 +3,7 @@ import { useFetchData } from '../../utils/customHooks/useFetchData';
 import { useAuthorizationCheck } from '../../utils/customHooks/useAuthorizationCheck';
 import { BookRow } from '../BookRow/BookRow';
 import styles from './finishedbooks.module.css';
+import { List } from 'antd';
 
 function FinishedBooks() {
     const { isAuthorized } = useAuthorizationCheck();
@@ -18,11 +19,17 @@ function FinishedBooks() {
     if (error) return <p>{error}</p>;
 
     function renderList() {
-        return data.map(item => {
-            return (
-                <BookRow key={item.id} item={item} fetchData={fetchData} />
-            )
-        })
+        return <List
+            pagination={{
+                position: 'bottom',
+                align: 'center',
+                pageSize: 30,
+            }}
+            dataSource={data}
+            renderItem={(item) => (
+                <BookRow key={item.id} item={item} />
+            )}>
+        </List>
     }
 
     if (!isAuthorized) {

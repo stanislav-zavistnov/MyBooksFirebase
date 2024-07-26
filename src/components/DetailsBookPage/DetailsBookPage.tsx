@@ -32,7 +32,7 @@ export function DetailsBookPage() {
             onOk() {
                 if (id) {
                     deleteData(id);
-                    navigate('/mybooks');
+                    navigate(-1);
                 }
             },
             onCancel() {

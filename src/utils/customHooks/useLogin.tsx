@@ -24,7 +24,7 @@ export const useLogin = () => {
                 const userRef = firestore.collection('authorizedUsers').doc(user.email);
                 userRef.get().then(async (doc) => {
                     if (doc.exists && doc.data()?.allowed) {
-                        navigate('/mybooks');
+                        navigate('/process-books');
                     } else {
                         await auth.signOut();
                         alert(`У вас нет доступа, извините`);

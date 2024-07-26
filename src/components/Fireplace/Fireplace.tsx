@@ -3,6 +3,7 @@ import { useFetchData } from '../../utils/customHooks/useFetchData';
 import { useAuthorizationCheck } from '../../utils/customHooks/useAuthorizationCheck';
 import { BookRow } from '../BookRow/BookRow';
 import styles from './fireplace.module.css';
+import { List } from 'antd';
 
 function Fireplace() {
     const { isAuthorized } = useAuthorizationCheck();
@@ -18,11 +19,17 @@ function Fireplace() {
     if (error) return <p>{error}</p>;
 
     function renderList() {
-        return data.map(item => {
-            return (
-                <BookRow key={item.id} item={item} fetchData={fetchData} />
-            )
-        })
+        return <List
+            pagination={{
+                position: 'bottom',
+                align: 'center',
+                pageSize: 30,
+            }}
+            dataSource={data}
+            renderItem={(item) => (
+                <BookRow key={item.id} item={item} />
+            )}>
+        </List>
     }
 
     if (!isAuthorized) {
@@ -32,11 +39,8 @@ function Fireplace() {
     return (
         <div className={styles.myBookWrap}>
             <h1 className={styles.sectionTitle}>
-                Fireplace
+                Камин
             </h1>
-            <p>
-                Добро пожаловать на страницу ваших книг!
-            </p>
             <div className={styles.myBookList}>
                 {renderList()}
             </div>

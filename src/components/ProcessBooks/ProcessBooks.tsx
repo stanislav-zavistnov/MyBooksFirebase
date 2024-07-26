@@ -5,11 +5,11 @@ import { Context } from '../../main';
 import { useFetchData } from '../../utils/customHooks/useFetchData';
 import { useAuthorizationCheck } from '../../utils/customHooks/useAuthorizationCheck';
 import { BookRow } from '../BookRow/BookRow';
-import styles from './mybooks.module.css';
-import { Button, DatePicker, Form, Input, InputRef, message, Modal } from 'antd';
+import styles from './processbooks.module.css';
+import { Button, DatePicker, Form, Input, InputRef, List, message, Modal } from 'antd';
 import { disabledDate } from '../../utils/disabledDate';
 
-function MyBooks() {
+function ProcessBooks() {
     const [form] = Form.useForm();
     const { isAuthorized } = useAuthorizationCheck();
     const { data, loading, error, fetchData } = useFetchData('collectionData', 'inProcess');
@@ -57,11 +57,17 @@ function MyBooks() {
     if (error) return <p>{error}</p>;
 
     function renderList() {
-        return data.map(item => {
-            return (
-                <BookRow key={item.id} item={item} fetchData={fetchData} />
-            )
-        })
+        return <List
+            pagination={{
+                position: 'bottom',
+                align: 'center',
+                pageSize: 30,
+            }}
+            dataSource={data}
+            renderItem={(item) => (
+                <BookRow key={item.id} item={item} />
+            )}>
+        </List>
     }
 
     const sendData = async () => {
@@ -115,18 +121,17 @@ function MyBooks() {
         <div className={styles.myBookWrap}>
             {contextHolder}
             <h1 className={styles.sectionTitle}>
-                My Books
+                Книги в процессе
             </h1>
-            <p>
-                Добро пожаловать на страницу ваших книг!
-            </p>
-            <Button type="primary" onClick={() => setModalCreate(true)}>
-                Vertically centered modal dialog
+            <Button className={styles.createButton} type="primary" onClick={() => setModalCreate(true)}>
+                Добавить книгу
             </Button>
             <Modal
-                title="Vertically centered modal dialog"
+                title="Создание новой книги"
                 centered
                 open={modalCreate}
+                cancelText='Отмена'
+                okText='Создать'
                 onOk={sendData}
                 onCancel={() => { setModalCreate(false); form.resetFields(); }}
             >
@@ -213,4 +218,4 @@ function MyBooks() {
     );
 }
 
-export default MyBooks;
+export default ProcessBooks;

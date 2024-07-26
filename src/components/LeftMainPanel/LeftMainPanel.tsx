@@ -51,9 +51,9 @@ export function LeftMainPanel({ handleSetUser }: IProps) {
                         Главная
                     </button>
                     <button
-                        onClick={() => { navigate('/mybooks') }}
-                        className={`${styles.navBarButton} ${pathname === '/mybooks' ? styles.activePath : ''}`}>
-                        Мои книги
+                        onClick={() => { navigate('/process-books') }}
+                        className={`${styles.navBarButton} ${pathname === '/process-books' ? styles.activePath : ''}`}>
+                        В процессе
                     </button>
                     <button
                         onClick={() => { navigate('/finished-books') }}
