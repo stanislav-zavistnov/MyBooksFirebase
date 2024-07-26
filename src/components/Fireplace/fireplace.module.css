@@ -1,0 +1,42 @@
+.myBookWrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    width: 100%;
+    padding-left: 270px;
+    padding-top: 30px;
+}
+
+.sectionTitle {
+    font-size: 30px;
+}
+
+.myBookInput {
+    margin-bottom: 10px;
+    max-width: 400px;
+    padding: 5px;
+    font-size: 15px;
+}
+
+.myBookBtn {
+    margin-bottom: 20px;
+}
+
+.myBookList {
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-top: 2px solid rgb(232, 232, 232);
+    border-bottom: 2px solid rgb(232, 232, 232);
+}
+
+.myBookList div:not(:last-child) {
+    margin-bottom: 5px;
+}
+
+.actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+}

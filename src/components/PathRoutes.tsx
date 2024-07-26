@@ -7,6 +7,8 @@ import { User } from 'firebase/auth';
 import firebase from 'firebase/compat/app';
 import MyBooks from './MyBooks/MyBooks';
 import { DetailsBookPage } from './DetailsBookPage/DetailsBookPage';
+import FinishedBooks from './FinishedBooks/FinishedBooks';
+import Fireplace from './Fireplace/Fireplace';
 
 function PathRoutes() {
   const [user, setUser] = useState<firebase.User | User | null>(null);
@@ -20,6 +22,10 @@ function PathRoutes() {
         <Route path="/" element={<App user={user}/>} />
         <Route path="/mybooks" element={<MyBooks />} />
         <Route path="/mybooks/:id" element={<DetailsBookPage />} />
+        <Route path="/finished-books" element={<FinishedBooks />} />
+        <Route path="/finished-books/:id" element={<DetailsBookPage />} />
+        <Route path="/fireplace" element={<Fireplace />} />
+        <Route path="/fireplace/:id" element={<DetailsBookPage />} />
         <Route path="/*" element={<NotFoundPage />} />
       </Routes>
     </>

@@ -56,3 +56,7 @@
     opacity: 0.5;
     transition: opacity .3s ease-in-out;
 }
+
+.activePath {
+    color: rgb(122, 185, 240);
+}

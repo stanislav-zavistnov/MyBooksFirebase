@@ -45,18 +45,26 @@ export function LeftMainPanel({ handleSetUser }: IProps) {
             </div>
             {user && (
                 <div className={styles.navBar}>
-                    {pathname !== '/'
-                        ? <button onClick={() => { navigate('/') }} className={styles.navBarButton}>
-                            Главная
-                        </button>
-                        : ''
-                    }
-                    {pathname !== '/mybooks'
-                        ? <button onClick={() => { navigate('/mybooks') }} className={styles.navBarButton}>
-                            Мои книги
-                        </button>
-                        : ''
-                    }
+                    <button
+                        onClick={() => { navigate('/') }}
+                        className={`${styles.navBarButton} ${pathname === '/' ? styles.activePath : ''}`}>
+                        Главная
+                    </button>
+                    <button
+                        onClick={() => { navigate('/mybooks') }}
+                        className={`${styles.navBarButton} ${pathname === '/mybooks' ? styles.activePath : ''}`}>
+                        Мои книги
+                    </button>
+                    <button
+                        onClick={() => { navigate('/finished-books') }}
+                        className={`${styles.navBarButton} ${pathname === '/finished-books' ? styles.activePath : ''}`}>
+                        Прочитанные
+                    </button>
+                    <button
+                        onClick={() => { navigate('/fireplace') }}
+                        className={`${styles.navBarButton} ${pathname === '/fireplace' ? styles.activePath : ''}`}>
+                        Камин
+                    </button>
                 </div>
             )}
         </div>

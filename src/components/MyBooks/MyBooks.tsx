@@ -12,7 +12,7 @@ import { disabledDate } from '../../utils/disabledDate';
 function MyBooks() {
     const [form] = Form.useForm();
     const { isAuthorized } = useAuthorizationCheck();
-    const { data, loading, error, fetchData } = useFetchData('collectionData');
+    const { data, loading, error, fetchData } = useFetchData('collectionData', 'inProcess');
     const [modalCreate, setModalCreate] = useState(false);
     const [valueInputNumber, setValueInputNumber] = useState('');
     const [currentPage, setCurrentPage] = useState('');
@@ -20,18 +20,28 @@ function MyBooks() {
     const valueInputRef = useRef<InputRef>(null);
     const currentPageRef = useRef<InputRef>(null);
     const [messageApi, contextHolder] = message.useMessage();
-    const successMessage = () => {
-        messageApi.open({
-            type: 'success',
-            content: 'Успешно добавлено в коллекцию',
-        });
-    };
-    const errorMessage = () => {
-        messageApi.open({
-            type: 'error',
-            content: 'Произошла ошибка при создании книги',
-        });
-    };
+    const [showSuccess, setShowSuccess] = useState(false);
+    const [showError, setShowError] = useState(false);
+
+    useEffect(() => {
+        if (showSuccess) {
+            messageApi.open({
+                type: 'success',
+                content: 'Успешно добавлено в коллекцию',
+            });
+            setShowSuccess(false);
+        }
+    }, [showSuccess, messageApi]);
+
+    useEffect(() => {
+        if (showError) {
+            messageApi.open({
+                type: 'error',
+                content: 'Произошла ошибка при создании книги',
+            });
+            setShowError(false);
+        }
+    }, [showError, messageApi]);
     if (!context) {
         throw new Error("Context must be used within a Provider");
     }
@@ -77,10 +87,10 @@ function MyBooks() {
             form.resetFields();
             await fetchData();
             setModalCreate(false);
-            successMessage();
+            setShowSuccess(true);
         } catch (error) {
             console.error('Error adding document:', error);
-            errorMessage();
+            setShowError(true);
         }
     };
 
@@ -138,22 +148,22 @@ function MyBooks() {
                         label={'Дата начала'}
                         rules={[
                             {
-                              required: true,
-                              message: 'Выберите дату начала чтения',
+                                required: true,
+                                message: 'Выберите дату начала чтения',
                             },
-                          ]}
+                        ]}
                     >
-                        <DatePicker allowClear disabledDate={disabledDate}/>
+                        <DatePicker allowClear disabledDate={disabledDate} />
                     </Form.Item>
                     <Form.Item
                         name={'bookLength'}
                         label={'Всего страниц'}
                         rules={[
                             {
-                              required: true,
-                              message: 'Укажите кол-во страниц в книге',
+                                required: true,
+                                message: 'Укажите кол-во страниц в книге',
                             },
-                          ]}
+                        ]}
                     >
                         <Input
                             id="bookLengthInput"
@@ -170,8 +180,8 @@ function MyBooks() {
                         label={'Я на странице №'}
                         rules={[
                             {
-                              required: true,
-                              message: 'Текущая страница',
+                                required: true,
+                                message: 'Текущая страница',
                             },
                             {
                                 validator: (_, value) => {
@@ -182,7 +192,7 @@ function MyBooks() {
                                     return Promise.reject(new Error('Текущая страница не может быть больше длины книги'));
                                 }
                             }
-                          ]}
+                        ]}
                     >
                         <Input
                             id="currentPageInput"

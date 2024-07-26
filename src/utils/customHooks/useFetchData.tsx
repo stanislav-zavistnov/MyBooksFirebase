@@ -4,7 +4,7 @@ import 'firebase/auth';
 import { DataItem } from '../../types';
 import { Context } from '../../main';
 
-export const useFetchData = (collectionName: string) => {
+export const useFetchData = (collectionName: string, statusFilter: string) => {
     const context = useContext(Context);
     if (!context) {
         throw new Error("Context must be used within a Provider");
@@ -15,8 +15,14 @@ export const useFetchData = (collectionName: string) => {
     const [error, setError] = useState<string | null>(null);
 
     const fetchData = useCallback(async () => {
+        setLoading(true);
+        setError(null);
+
         try {
-            const snapshot = await firestore.collection(collectionName).orderBy('id', 'desc').get();
+            const query = firestore.collection(collectionName)
+                .where('status', '==', statusFilter)
+                .orderBy('id', 'desc');
+            const snapshot = await query.get();
             const fetchedData: DataItem[] = snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data() as Omit<DataItem, 'id'>
@@ -28,7 +34,7 @@ export const useFetchData = (collectionName: string) => {
         } finally {
             setLoading(false);
         }
-    }, [collectionName, firestore]);
+    }, [collectionName, firestore, statusFilter]);
 
     return { data, loading, error, fetchData };
 };
