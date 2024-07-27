@@ -9,13 +9,13 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import PathRoutes from './components/PathRoutes.tsx';
 
 firebase.initializeApp({
-  apiKey: "AIzaSyBaCU0zOa0shbiEdmzOxNI7HhXkEDNtLRc",
-  authDomain: "mybookstore-1.firebaseapp.com",
-  projectId: "mybookstore-1",
-  storageBucket: "mybookstore-1.appspot.com",
-  messagingSenderId: "885798984918",
-  appId: "1:885798984918:web:a3d52195dde22a71eb3d77",
-  measurementId: "G-15R3NBRCY5"
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
+  measurementId: import.meta.env.VITE_MEASUREMENT_ID
 });
 
 export interface FirebaseContextProps {
