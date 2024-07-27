@@ -23,6 +23,17 @@
     border-bottom: 2px solid rgb(175, 175, 175);
 }
 
+.titleRow {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 15px;
+}
+
+.dataTitle {
+    display: block;
+    font-size: 15px;
+}
+
 .myBookList div:not(:last-child) {
     margin-bottom: 5px;
 }

@@ -45,6 +45,26 @@ function FinishedBooks() {
                 Добро пожаловать на страницу ваших книг!
             </p>
             <div className={styles.myBookList}>
+            <div className={styles.titleRow}>
+                    <span className={styles.dataTitle}>
+                        Дата начала
+                    </span>
+                    <span className={styles.dataTitle}>
+                        Название
+                    </span>
+                    <span className={styles.dataTitle}>
+                        Текущая страница
+                    </span>
+                    <span className={styles.dataTitle}>
+                        Всего страниц
+                    </span>
+                    <span className={styles.dataTitle}>
+                        Прогресс %
+                    </span>
+                    <span className={styles.dataTitle}>
+                        Осталось страниц
+                    </span>
+                </div>
                 {renderList()}
             </div>
         </div>

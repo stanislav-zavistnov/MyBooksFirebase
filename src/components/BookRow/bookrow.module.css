@@ -1,8 +1,8 @@
 .rowWrap {
     padding: 5px;
-    display: flex;
-    align-items: center;
-    flex-wrap: nowrap;
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 15px;
     border-radius: 4px;
     cursor: pointer;
     background-color: rgb(245, 245, 245);
@@ -13,4 +13,18 @@
 .rowWrap:focus {
     background-color: rgb(209, 209, 209);
     transition: background-color .3s ease-in-out;
+}
+
+.rowData {
+    display: flex;
+    flex-direction: column;
+}
+
+.dataCount {
+    display: block;
+}
+
+.dataCount {
+    font-size: 18px;
+    font-weight: 600;
 }

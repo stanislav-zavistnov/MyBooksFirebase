@@ -139,6 +139,8 @@ function ProcessBooks() {
                     <Form.Item
                         name={'bookName'}
                         label={'Название книги'}
+                        layout='vertical'
+                        style={{ paddingBottom: '20px' }}
                         rules={[
                             {
                                 required: true,
@@ -151,6 +153,8 @@ function ProcessBooks() {
                     <Form.Item
                         name={'started'}
                         label={'Дата начала'}
+                        layout='vertical'
+                        style={{ paddingBottom: '20px' }}
                         rules={[
                             {
                                 required: true,
@@ -163,6 +167,8 @@ function ProcessBooks() {
                     <Form.Item
                         name={'bookLength'}
                         label={'Всего страниц'}
+                        layout='vertical'
+                        style={{ paddingBottom: '20px' }}
                         rules={[
                             {
                                 required: true,
@@ -183,6 +189,8 @@ function ProcessBooks() {
                     <Form.Item
                         name={'currentPage'}
                         label={'Я на странице №'}
+                        layout='vertical'
+                        style={{ paddingBottom: '20px' }}
                         rules={[
                             {
                                 required: true,
@@ -212,6 +220,26 @@ function ProcessBooks() {
                 </Form>
             </Modal>
             <div className={styles.myBookList}>
+                <div className={styles.titleRow}>
+                    <span className={styles.dataTitle}>
+                        Дата начала
+                    </span>
+                    <span className={styles.dataTitle}>
+                        Название
+                    </span>
+                    <span className={styles.dataTitle}>
+                        Текущая страница
+                    </span>
+                    <span className={styles.dataTitle}>
+                        Всего страниц
+                    </span>
+                    <span className={styles.dataTitle}>
+                        Прогресс %
+                    </span>
+                    <span className={styles.dataTitle}>
+                        Осталось страниц
+                    </span>
+                </div>
                 {renderList()}
             </div>
         </div>
