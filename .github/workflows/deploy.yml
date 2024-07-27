@@ -1,0 +1,61 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build the project
+      run: npm run build
+
+    - name: List files in dist
+      run: ls -la ./dist
+
+    - name: Install LFTP
+      run: sudo apt-get install -y lftp
+
+    - name: Remove specific files and directories on FTP
+      env:
+        FTP_SERVER: ${{ secrets.FTP_SERVER }}
+        FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+        FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        FTP_PORT: ${{ secrets.FTP_PORT }}
+      run: |
+        lftp -c "open -u $FTP_USERNAME,$FTP_PASSWORD -p $FTP_PORT $FTP_SERVER; \
+        rm /mybook/public_html/index.html; \
+        rm -r /mybook/public_html/assets/; \
+        # Добавьте здесь другие команды удаления, если нужно"
+
+    - name: Deploy to FTP
+      env:
+        FTP_SERVER: ${{ secrets.FTP_SERVER }}
+        FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+        FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        FTP_PORT: ${{ secrets.FTP_PORT }}
+      run: |
+        lftp -c "open -u $FTP_USERNAME,$FTP_PASSWORD -p $FTP_PORT $FTP_SERVER; mirror -R ./dist /mybook/public_html"
+
+    - name: List files on FTP server after deploy
+      env:
+        FTP_SERVER: ${{ secrets.FTP_SERVER }}
+        FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+        FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+        FTP_PORT: ${{ secrets.FTP_PORT }}
+      run: |
+        lftp -c "open -u $FTP_USERNAME,$FTP_PASSWORD -p $FTP_PORT $FTP_SERVER; ls -la /mybook/public_html"

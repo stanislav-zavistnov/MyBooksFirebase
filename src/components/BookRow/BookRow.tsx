@@ -13,7 +13,13 @@ export function BookRow({ item }: IItem) {
     const createdAt = +item.id;
     const convertDate = dayjs(createdAt).format('DD.MM.YYYY');
     const handleClick = () => {
-        navigate(`/mybooks/${item.id}`);
+        if (item.status === 'inProcess') {
+            navigate(`/process-books/${item.id}`);
+        } else if (item.status === 'finished') {
+            navigate(`/finished-books/${item.id}`);
+        } else if (item.status === 'fireplace') {
+            navigate(`/fireplace/${item.id}`);
+        }
     };
     return (
         <div
